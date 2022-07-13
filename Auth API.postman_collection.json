@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "63c308a8-2681-4d86-a980-86b228835443",
+		"name": "Auth API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4807789"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\")",
+									"let lastName = pm.variables.replaceIn(\"{{$randomFirstName}}\")",
+									"",
+									"pm.environment.set(\"firstName\", firstName)",
+									"",
+									"pm.environment.set(\"lastName\", lastName)",
+									"",
+									"pm.environment.set(\"email\", `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"passwordConfirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"passwordConfirmation\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "\"User successfully created\""
+						},
+						{
+							"name": "Passwords do not match",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"passwordConfirmation\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n    {\n        \"code\": \"custom\",\n        \"message\": \"Passwords do not match\",\n        \"path\": [\n            \"body\",\n            \"passwordConfirmation\"\n        ]\n    }\n]"
+						},
+						{
+							"name": "Passwords do not match Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"passwordConfirmation\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "Account already exists"
+						}
+					]
+				},
+				{
+					"name": "Verify user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/users/verify/:id/:verificationCode",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"verify",
+								":id",
+								":verificationCode"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62ce7513813a931423457262"
+								},
+								{
+									"key": "verificationCode",
+									"value": "PEF97nA_5WhEHwn3dLZgo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/users/forgot-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{passwordTwo}}\",\n    \"passwordConfirmation\": \"{{passwordTwo}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/users/reset-password/:id/:passwordResetCode",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"reset-password",
+								":id",
+								":passwordResetCode"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62cd52a1e76951c7d23aed0b"
+								},
+								{
+									"key": "passwordResetCode",
+									"value": "bK_669bxBLvSws9vMnR7K"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/users/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.accessToken)",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/sessions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable(\"accessToken\", \"\")",
+									"postman.setEnvironmentVariable(\"refreshToken\", \"\")"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-session",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/sessions/out",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.accessToken)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/sessions/refresh",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
