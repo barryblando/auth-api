@@ -44,4 +44,17 @@
 - Generate new keys: [JSEncrypt](https://travistidwell.com/jsencrypt/demo/)
   - RSA 1024 bit
 - Base64 encode the keys: [Base64Encode](https://www.base64encode.org/)
-  - Private and Public Keys
+  - Private and Public Keys for Access and Refresh
+
+## Access & Refresh Token Flow
+
+```mermaid
+graph TD
+    A[Authorized Request]--> B{Is the access token valid?}
+    B -->|NO| C(Return Unauthorized error)
+    B -->|YES| D{Has the access token expired?}
+    D -->|YES| E{Is a valid refresh token included?}
+    D -->|NO| F["Process request (Go to route handler)"]
+    E -->|YES| G(Issue a new access token)
+    E -->|NO| C
+```
