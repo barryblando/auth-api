@@ -6,7 +6,7 @@ import sendMail from '../../utils/mailer'
 
 // TIP: Test only functionalities/modules that user/business does care about
 // These ones down here I'm testing isn't really critical, just showing how to test
-// As long as you handle all error possibilites in an auth API, you can skip these kinds of tests
+// As long as you handle all error possibilities in an auth API, you can skip these kinds of tests
 
 const setup = async () => {
   const response = await request(app)
