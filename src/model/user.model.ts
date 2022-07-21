@@ -4,15 +4,6 @@ import { nanoid } from 'nanoid'
 import argon2 from 'argon2'
 import log from '../utils/logger'
 
-export const privateFields = [
-  "password",
-  "__v",
-  "verificationCode",
-  "passwordResetCode",
-  "verified",
-  "salt"
-]
-
 @pre<User>("save", async function() {
   // if password not being modified return
   if (!this.isModified('password')) return
@@ -25,10 +16,27 @@ export const privateFields = [
 
   return
 })
-@index({ email: 1 }) // adding index for finding by email in forgot password a little bit quicker
+@index({ email: 1 }) // indexing email a little bit quicker in findByEmail
 @modelOptions({
   schemaOptions: {
-    timestamps: true
+    timestamps: true,
+    // optimisticConcurrency: true // use for microservices
+    // versionKey: 'version' // use for microservices
+    toJSON: {
+      transform(doc, ret) {
+        // I assign _id to id, for it to work with other micro services' Database
+        ret.id = ret._id
+        delete ret._id // remove _id after converting it
+        // Private Fields to remove when doing JSON, not useful in micro services I'm integrating 
+        delete ret.__v
+        delete ret.password
+        // for verification & reset test purposes won't delete unless are in production
+        process.env.NODE_ENV === "production" && delete ret.verificationCode
+        process.env.NODE_ENV === "production" && delete ret.passwordResetCode
+        delete ret.verified
+        delete ret.salt
+      }
+    }
   },
   options: {
     allowMixed: Severity.ALLOW
@@ -46,6 +54,9 @@ export class User {
   
   @prop({ require: true })
   password: string
+
+  @prop({ default: 'user' })
+  role: string
 
   @prop({ required: true, default: () => nanoid() })
   verificationCode: string
