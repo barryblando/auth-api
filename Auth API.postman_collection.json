@@ -172,11 +172,11 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "62ce7513813a931423457262"
+									"value": "62d7ee217159237e6a76f37a"
 								},
 								{
 									"key": "verificationCode",
-									"value": "PEF97nA_5WhEHwn3dLZgo"
+									"value": "ahchoxcbKHo2axn9XDMU9"
 								}
 							]
 						}
@@ -279,6 +279,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Users (Restricted to Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -361,9 +389,10 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "x-session",
-								"value": "{{refreshToken}}",
-								"type": "text"
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
