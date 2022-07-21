@@ -21,13 +21,22 @@ export async function createUserHandler(
       text: `Verification Code: ${user.verificationCode}. Id: ${user._id}`
     })
 
-    return res.send("User successfully created")
+    return res
+      .status(201)
+      .send({ status: "SUCCESS", user: user.toJSON() })
   } catch (e: any) {
+    // https://bobcares.com/blog/mongodb-error-code-11000/
+    // https://stackoverflow.com/q/70739146/
+    // email is unique. mongodb will throw error code 11000 for duplicate key
     if (e.code === 11000) {
-      return res.status(409).send("Account already exists")
+      return res
+        .status(409)
+        .send({ status: "FAIL", message: "Account already exists" })
     }
 
-    return res.status(500).send(e)
+    return res
+      .status(500)
+      .send({ status: "ERROR", message: e })
   }
 }
 
@@ -39,12 +48,16 @@ export async function verifyUserHandler(req: Request<VerifyUserInput>, res: Resp
   const user = await findByUserId(id)
   
   if(!user) {
-    return res.send("Could not verify user")
+    return res
+      .status(404)
+      .send({ status: "FAIL", message: "Could not verify user" })
   }
 
   // check to see if the are already verified
   if (user.verified) {
-    return res.send("User is already verified")
+    return res
+      .status(409)
+      .send({ status: "FAIL", message: "User is already verified" })
   }
   
   // check to see if the verificationCode maches
@@ -53,10 +66,14 @@ export async function verifyUserHandler(req: Request<VerifyUserInput>, res: Resp
     
     await user.save()
     
-    return res.send("User successfully verified")
+    return res
+      .status(200)
+      .send({ status: "SUCCESS", message: "User successfully verified" })
   }
 
-  return res.send("Could not verify user")
+  return res
+    .status(400)
+    .send({ status: "FAIL", message: "Could not verify user" })
 }
 
 export async function forgotPasswordHandler(
@@ -70,11 +87,15 @@ export async function forgotPasswordHandler(
 
   if (!user) {
     log.debug(`User with email ${email} does not exists`)
-    return res.send(message)
+    return res
+      .status(404)
+      .send({ status: "FAIL", message })
   }
 
   if (!user.verified) {
-    return res.send("user is not verified")
+    return res
+      .status(409)
+      .send({ status: "FAIL", message: "user is not verified" })
   }
 
   const passwordResetCode = nanoid()
@@ -92,7 +113,9 @@ export async function forgotPasswordHandler(
 
   log.debug(`Password reset email sent to ${email}`)
 
-  return res.send(message)
+  return res
+    .status(201)
+    .send({ status: "SUCCESS", message })
 }
 
 export async function resetPasswordHandler(
@@ -110,7 +133,9 @@ export async function resetPasswordHandler(
     !user.passwordResetCode || // if passwordResetCode is null
     user.passwordResetCode !== passwordResetCode // if doesn't match
   ) {
-    return res.status(400).send("Could not reset user password")
+    return res
+      .status(400)
+      .send({ status: "FAIL", message: "Could not reset user password" })
   }
 
   user.passwordResetCode = null
@@ -118,11 +143,13 @@ export async function resetPasswordHandler(
   
   await user.save()
 
-  return res.send("Successfully update user password")
+  return res
+    .status(200)
+    .send({ status: "SUCCESS", message: "Successfully update user password" })
 }
 
 export async function getCurrentUserHandler(
-  req: Request,
+  _req: Request,
   res: Response
 ) {
   return res.send(res.locals.user)
