@@ -1,6 +1,7 @@
-# Authentication REST API with Node.js, TypeScript, Typegoose & Zod
+# Authentication & Authorization REST API
 
 ## Features
+
 1. Register a user
 2. Verify user's email address
 3. Send forgot password email
@@ -12,6 +13,7 @@
 9. Refresh tokens
 
 ## Tech Stack Used
+
 - [TypeScript](https://www.typescriptlang.org/) - Static type checking 
 - [Express@5](https://expressjs.com/en/5x/api.html) - Web server
 - [Typegoose](https://typegoose.github.io/typegoose/) - Mongoose wrapper for creating TypeScript interfaces and models
@@ -23,11 +25,13 @@
 - [config](https://github.com/lorenwest/node-config) - Managing configuration
 
 ## Tools Used?
+
 - [Postman](https://www.postman.com/downloads/)
 - [Node.js](https://nodejs.org/en/)
 - [MongoDB](https://www.mongodb.com/try/download/community)
 
 ## Structure
+
 1. User API
     1. Create user
     2. Verify user
