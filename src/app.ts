@@ -28,7 +28,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  err.status = err.status || 'error'
+  err.status = err.status || 'ERROR'
   err.statusCode = err.statusCode || 500
 
   res.status(err.statusCode).json({
