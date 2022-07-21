@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { nanoid } from 'nanoid'
 import { CreateUserInput, ForgotPasswordInput, ResetPasswordInput, VerifyUserInput } from '../schema/user.schema'
-import { createUser, findByUserId, findUserByEmail } from '../service/user.service'
+import { createUser, findByUserId, findUserByEmail, findUsers } from '../service/user.service'
 import log from '../utils/logger'
 import sendEmail from '../utils/mailer'
 
@@ -153,4 +153,13 @@ export async function getCurrentUserHandler(
   res: Response
 ) {
   return res.send(res.locals.user)
+}
+
+export async function getAllUsersHandler(
+  _req: Request,
+  res: Response,
+) {
+  const users = await findUsers()
+
+  return res.send(users)
 }
