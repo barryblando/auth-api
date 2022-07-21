@@ -1,4 +1,5 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import { createSessionHandler, deleteSessionHandler, refreshAccessTokenHandler } from '../controller/auth.controller'
 import validateResource from '../middleware/validateResource'
 import { createSessionSchema } from '../schema/auth.schema'
@@ -13,11 +14,13 @@ router.post(
 
 router.post(
   "/api/sessions/refresh",
+  cookieParser(),
   refreshAccessTokenHandler
 )
 
 router.post(
   "/api/sessions/out",
+  cookieParser(),
   deleteSessionHandler
 )
 
