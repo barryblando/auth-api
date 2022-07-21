@@ -1,8 +1,9 @@
 import express from 'express'
 import validateResource from '../middleware/validateResource'
-import { createUserHandler, forgotPasswordHandler, getCurrentUserHandler, resetPasswordHandler, verifyUserHandler } from '../controller/user.controller'
+import { createUserHandler, forgotPasswordHandler, getCurrentUserHandler, getAllUsersHandler, resetPasswordHandler, verifyUserHandler } from '../controller/user.controller'
 import { createUserSchema, forgotPasswordSchema, resetPasswordSchema, verifyUserSchema } from '../schema/user.schema'
 import requireUser from '../middleware/requireUser'
+import { restrictTo } from '../middleware/restrictTo'
 
 const router = express.Router()
 
@@ -31,5 +32,14 @@ router.post(
 )
 
 router.get('/api/users/me', requireUser, getCurrentUserHandler)
+
+router.get(
+  '/api/users',
+  [
+    requireUser,
+    restrictTo('admin')
+  ],
+  getAllUsersHandler
+)
 
 export default router
