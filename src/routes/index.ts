@@ -4,12 +4,22 @@ import auth from './auth.routes'
 
 const router = express.Router()
 
-// Testing
+/**
+ * @openapi
+ * /api/healthcheck:
+ *  get:
+ *     tags:
+ *     - Healthcheck
+ *     description: Responds if the app is up and running
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.get(
   '/api/healthcheck',
   (req: Request, res: Response, _next: NextFunction) => {
     res.status(200).json({
-      status: 'success',
+      status: 'SUCCESS',
       message: 'Ok',
       ip: req.ip,
       userAgent: req.headers["user-agent"]
