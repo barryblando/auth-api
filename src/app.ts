@@ -1,9 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express'
 // import cors from 'cors'
 import router from './routes'
+import config from 'config'
 import deserializeUser from './middleware/deserializeUser'
+import { swaggerDocs } from './utils/swagger'
 
 const app = express()
+
+const port = config.get('port') as number
 
 app.use(express.json())
 
@@ -18,6 +22,9 @@ app.use(deserializeUser)
 // );
 
 app.use(router)
+
+// Swagger Docs
+swaggerDocs(app, port)
 
 // UnKnown Routes
 app.use((req: Request, _res: Response, next: NextFunction) => {
