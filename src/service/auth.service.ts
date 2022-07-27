@@ -3,9 +3,24 @@ import { DocumentType } from '@typegoose/typegoose'
 import SessionModel, { Session } from '../model/session.model'
 import { User } from '../model/user.model'
 import { signJwt } from '../utils/jwt'
+import { databaseResponseTimeHistogram } from '../utils/metrics'
 
 export async function createSession({ userId, userAgent, ip }: Partial<DocumentType<Session>>) {
-  return SessionModel.create({ userId, userAgent, ip })
+  const metricsLabels = {
+    operation: 'createSesssion'
+  }
+
+  const timer = databaseResponseTimeHistogram.startTimer()
+  try {
+    const result = await SessionModel.create({ userId, userAgent, ip })
+    
+    timer({ ...metricsLabels, success: "true" })
+    
+    return result
+  } catch (e) {
+    timer({ ...metricsLabels, success: "false" })
+    throw e
+  }
 }
 
 export async function findSessionById(id: string) {
