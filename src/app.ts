@@ -1,9 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express'
 // import cors from 'cors'
+import responseTime from 'response-time'
 import router from './routes'
 import config from 'config'
 import deserializeUser from './middleware/deserializeUser'
 import { swaggerDocs } from './utils/swagger'
+import { restResponseTimeHistogram } from './utils/metrics'
 
 const app = express()
 
@@ -20,6 +22,17 @@ app.use(deserializeUser)
 //     credentials: true,
 //   })
 // );
+
+// Metrics - order matters. This middleware must receive incoming request first and record for response time
+app.use(responseTime((req: Request, res: Response, time: number) => {
+  if (req?.route?.path) {
+    restResponseTimeHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      status_code: res.statusCode,
+    }, time * 1000)
+  }
+}))
 
 app.use(router)
 
