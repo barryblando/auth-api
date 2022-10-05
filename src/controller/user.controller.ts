@@ -67,7 +67,7 @@ export async function verifyUserHandler(req: Request<VerifyUserInput>, res: Resp
     await user.save()
     
     return res
-      .status(200)
+      .status(201)
       .send({ status: "SUCCESS", message: "User successfully verified" })
   }
 
