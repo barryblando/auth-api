@@ -84,6 +84,13 @@ export const resetPasswordSchema = object({
   }),
 })
 
+export const getUsersSchema = object({
+  query: object({
+    page: string().optional().default("1"),
+    limit: string().optional().default("5")
+  })
+})
+
 // TypeOf function from Zod to infer the TypeScript types of schemas to be use in validateResource
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"]
 
@@ -92,3 +99,5 @@ export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"]
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"]
 
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>
+
+export type GetUsersInput = TypeOf<typeof getUsersSchema>["query"]

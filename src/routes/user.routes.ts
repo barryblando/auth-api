@@ -1,7 +1,7 @@
 import express from 'express'
 import validateResource from '../middleware/validateResource'
 import { createUserHandler, forgotPasswordHandler, getCurrentUserHandler, getAllUsersHandler, resetPasswordHandler, verifyUserHandler } from '../controller/user.controller'
-import { createUserSchema, forgotPasswordSchema, resetPasswordSchema, verifyUserSchema } from '../schema/user.schema'
+import { createUserSchema, forgotPasswordSchema, resetPasswordSchema, getUsersSchema, verifyUserSchema } from '../schema/user.schema'
 import requireUser from '../middleware/requireUser'
 import { restrictTo } from '../middleware/restrictTo'
 
@@ -60,6 +60,7 @@ router.get('/api/users/me', requireUser, getCurrentUserHandler)
 
 router.get(
   '/api/users',
+  validateResource(getUsersSchema),
   [
     requireUser,
     restrictTo('admin')

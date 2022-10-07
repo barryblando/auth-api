@@ -5,8 +5,8 @@ export default {
   origin: 'http://localhost:3000',
   // test mail server credentials
   smtp: {
-    user: 'fobpudj62qdr5shc@ethereal.email',
-    pass: 'crDYz7hmCuYfwyjUWM',
+    user: 'hhlixfdqenyasr53@ethereal.email',
+    pass: 'FX9VgFZHxuNtK1RCAM',
     host: 'smtp.ethereal.email',
     port: 587 ,
     secure: false,

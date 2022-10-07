@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { nanoid } from 'nanoid'
-import { CreateUserInput, ForgotPasswordInput, ResetPasswordInput, VerifyUserInput } from '../schema/user.schema'
+import { CreateUserInput, ForgotPasswordInput, GetUsersInput, ResetPasswordInput, VerifyUserInput } from '../schema/user.schema'
 import { createUser, findByUserId, findUserByEmail, findUsers } from '../service/user.service'
 import log from '../utils/logger'
 import sendEmail from '../utils/mailer'
@@ -156,10 +156,12 @@ export async function getCurrentUserHandler(
 }
 
 export async function getAllUsersHandler(
-  _req: Request,
+  req: Request<{}, GetUsersInput, {}>,
   res: Response,
 ) {
-  const users = await findUsers()
+  const { page, limit } = req.query 
+  
+  const users = await findUsers(page, limit)
 
   return res.send(users)
 }
