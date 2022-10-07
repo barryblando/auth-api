@@ -69,6 +69,12 @@ export class User {
 
   @prop()
   salt: Buffer
+
+  @prop({ default: () => Date.now()})
+  createdAt: Date
+
+  @prop({ default: () => Date.now()})
+  updatedAt: Date  
   
   // candidate password supplied by the user
   async validatePassword(this: DocumentType<User>, candidatePassword: string) {
