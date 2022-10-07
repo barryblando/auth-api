@@ -12,6 +12,12 @@ export function findUserByEmail(email: string) {
   return UserModel.findOne({ email })
 }
 
-export function findUsers() {
+export function findUsers(page: any, limit: any) {
+  const currentPage = parseInt(page)
+  const perPage = parseInt(limit)
+  
   return UserModel.find()
+    .sort({ createdAt: -1 })
+    .skip((currentPage - 1) * perPage)
+    .limit(perPage)
 }
